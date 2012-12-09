@@ -15,8 +15,8 @@ class EqualsGenerator {
             PsiElementFactory factory = getFactory(equalsPsiFields[0])
             StringBuilder methodText = new StringBuilder()
             methodText << '@Override public boolean equals(Object obj) {'
-            methodText << ' if (obj == null) {return false;}'
-            methodText << ' if (getClass() != obj.getClass()) {return false;}'
+            methodText << ' if (this == obj) {return true;}'
+            methodText << ' if (obj == null || getClass() != obj.getClass()) {return false;}'
             methodText << " final ${psiClass.name} other = (${psiClass.name}) obj;"
             methodText << ' return '
             equalsPsiFields.eachWithIndex { field, index ->
