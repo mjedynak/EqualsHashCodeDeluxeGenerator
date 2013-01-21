@@ -17,6 +17,7 @@ class EqualsGenerator {
             methodText << '@Override public boolean equals(Object obj) {'
             methodText << ' if (this == obj) {return true;}'
             methodText << ' if (obj == null || getClass() != obj.getClass()) {return false;}'
+            methodText << ' if (!super.equals(obj)) {return false;}'
             methodText << " final ${psiClass.name} other = (${psiClass.name}) obj;"
             methodText << ' return '
             equalsPsiFields.eachWithIndex { field, index ->
