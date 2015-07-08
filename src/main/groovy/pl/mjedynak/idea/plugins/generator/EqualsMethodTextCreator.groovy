@@ -27,7 +27,7 @@ class EqualsMethodTextCreator {
         if (parentClassChecker.hasClassWithOverriddenMethodInInheritanceHierarchy(equalsMethodFinder, psiClass)) {
             methodText << ' if (!super.equals(obj)) {return false;}'
         }
-        methodText << " final ${psiClass.name} other = (${psiClass.name}) obj;"
+        methodText << " ${psiClass.name} other = (${psiClass.name}) obj;"
         methodText << ' return '
         equalsPsiFields.eachWithIndex { PsiField field, int index ->
             if (isNotFirstField(index)) {
