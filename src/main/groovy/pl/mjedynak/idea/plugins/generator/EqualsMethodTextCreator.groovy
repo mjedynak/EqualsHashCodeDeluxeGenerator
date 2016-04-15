@@ -24,15 +24,22 @@ class EqualsMethodTextCreator {
         methodText << '@Override public boolean equals(Object obj) {'
         methodText << ' if (this == obj) {return true;}'
         methodText << ' if (obj == null || getClass() != obj.getClass()) {return false;}'
-        if (parentClassChecker.hasClassWithOverriddenMethodInInheritanceHierarchy(equalsMethodFinder, psiClass)) {
-            methodText << ' if (!super.equals(obj)) {return false;}'
-        }
         methodText << " final ${psiClass.name} other = (${psiClass.name}) obj;"
         methodText << ' return '
-        equalsPsiFields.eachWithIndex { PsiField field, int index ->
-            if (isNotFirstField(index)) {
+
+        boolean returnSuper
+        if (parentClassChecker.hasClassWithOverriddenMethodInInheritanceHierarchy(equalsMethodFinder, psiClass)) {
+            methodText << 'super.equals(obj)'
+            returnSuper = true
+        } else {
+            returnSuper = false
+        }
+
+        equalsPsiFields.eachWithIndex { PsiField field, index ->
+            if (returnSuper && isFirstField(index) || !isFirstField(index)) {
                 methodText << '\n && '
             }
+
             if (isArray(field)) {
                 methodText << "${equalsAndHashCodeType.arrayComparisonMethodName()}(this.${field.name}, other.${field.name})"
             } else {
@@ -47,7 +54,7 @@ class EqualsMethodTextCreator {
         field.type instanceof PsiArrayType
     }
 
-    private boolean isNotFirstField(int index) {
-        index > 0
+    private boolean isFirstField(int index) {
+        index == 0
     }
 }

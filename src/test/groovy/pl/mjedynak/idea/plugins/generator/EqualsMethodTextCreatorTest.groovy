@@ -57,8 +57,7 @@ class EqualsMethodTextCreatorTest extends Specification {
         then:
         result == '@Override public boolean equals(Object obj) { if (this == obj) {return true;} ' +
                 'if (obj == null || getClass() != obj.getClass()) {return false;} ' +
-                'if (!super.equals(obj)) {return false;} ' +
-                'final Object other = (Object) obj; return Objects.equals(this.field, other.field);}'
+                'final Object other = (Object) obj; return super.equals(obj)\n && Objects.equals(this.field, other.field);}'
     }
 
     def "creates equals method for two fields"() {
